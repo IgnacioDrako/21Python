@@ -1,55 +1,7 @@
 import socket
 import threading
 import random
-#========================IgnacioDrako========================#
-# 111111111111111111111111111111111111111111111111111111111
-# 111111111111111111111111111111111¶¶¶111111111111111111111
-# 111111111111111111111111111111¶¶¶¶11111111111111111111111
-# 1111111111111111111111111111¶¶¶¶1111111111111111111111111
-# 11111111111111111111111111¶¶¶¶¶¶1111111111111111111111111
-# 111111111111111111111111¶¶¶¶¶¶1111¶¶¶11¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111
-# 111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111
-# 11111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111111
-# 11111111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111
-# 1111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111111111
-# 111111111111111¶¶¶111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111111
-# 111111111111¶¶¶¶¶11¶¶¶¶¶¶¶¶¶¶¶11¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111
-# 11111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1¶¶1111¶¶¶¶¶¶¶¶¶¶¶¶¶11¶¶¶¶¶1111
-# 1111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111¶11111¶¶¶¶¶¶¶¶¶¶¶¶¶111¶¶¶¶111
-# 11111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111¶¶¶11
-# 1111¶¶¶¶¶¶¶¶111111111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111¶¶1
-# 11111¶¶¶¶¶111111111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111
-# 1111111¶1111111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111111
-# 1111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111111
-# 111111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11¶¶¶¶¶1111111
-# 11111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111¶¶¶¶¶1111111
-# 11111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111¶¶¶¶1111111
-# 111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111¶¶¶¶1111111
-# 1111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111111¶¶¶¶1111111
-# 111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111¶¶¶¶¶¶111111111111111¶¶¶11111111
-# 11¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111111111111111111111111111¶¶111111111
-# 1¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111111111111¶¶1111111111111111111111
-# ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111111111111111¶¶¶¶11111111111111111
-# ¶¶¶¶¶¶¶¶¶¶1¶¶¶111111111111111111111111¶¶¶¶¶11111111111111
-# ¶¶¶¶¶¶¶¶¶¶11¶¶11111111111111111111111111¶¶¶¶¶¶¶1111111111
-# ¶¶¶¶¶¶¶¶¶¶¶111¶111111111111¶¶¶11111¶¶¶¶111¶¶¶¶¶¶¶11111111
-# ¶¶¶¶¶¶¶¶¶¶¶¶11111111111111111¶¶¶11111¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111
-# ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶1111
-# ¶1¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11
-# ¶¶11¶¶¶¶¶¶¶¶¶¶¶¶111111111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶111¶¶¶¶¶¶¶¶¶¶¶¶1
-# 1¶11¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111111¶¶¶¶¶¶¶¶
-# 1111¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11111111111111¶¶¶¶¶¶
-# 1111¶¶¶¶¶1¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶11¶¶¶¶¶¶¶¶11111111111111¶¶¶¶¶
-# 11111¶¶¶11111¶¶¶¶¶¶¶¶¶¶¶¶¶11111¶¶¶¶¶¶¶¶¶¶11111111111111¶¶
-# 1111¶¶¶11111111¶¶¶1¶¶¶¶¶¶¶¶¶11111¶¶¶¶¶11111111111111111¶¶
-# 1111¶¶¶111111111111111¶¶¶¶¶¶¶1111111¶¶¶¶¶¶¶¶111111111111¶
-# 11111¶¶1111111111111111111¶¶¶¶¶1111111111111111111111111¶
-# 111111¶11111111111111111111¶¶¶¶11111111111111111111111111
-# 1111111111111111111111111111¶¶¶11111111111111111111111111
-# 11111111111111111111111111111¶¶11111111111111111111111111
-# 111111111111111111111111111111111111111111111111111111111
-# 111111111111111111111111111111111111111111111111111111111
-#========================IgnacioDrako========================#
+
 # Función para repartir una carta aleatoria del mazo
 def repartir_carta(mazo):
     palo = random.choice(mazo)
@@ -123,24 +75,25 @@ def handle_client(client_socket):
 
     while True:
         if TurnoPj:
-            client_socket.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")#Mensaje para el jugador, menu de opciones
-            opcion = client_socket.recv(1024).decode().strip()#Recibe la opción del jugador
+            client_socket.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")
+            opcion = client_socket.recv(1024).decode().strip()
             if opcion == "1":
                 carta = repartir_carta(mazo)
                 cartasPj.append(carta)
                 suma_jugador = calcular_suma(cartasPj)
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
-                client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())#Mensaje para el jugador, cartas y valor
+                client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
                 if resultado:
-                    client_socket.sendall(resultado.encode())#Mensaje para el jugador, resultado
+                    client_socket.sendall(resultado.encode())
                     break
                 if len(cartasPj) == 2:
                     TurnoPj = False
             elif opcion == "2":
                 TurnoPj = False
             else:
-                client_socket.sendall("Opción no válida. Inténtalo de nuevo.\n".encode('utf-8'))#Mensaje para el jugador, opción no válida
+                client_socket.sendall("Opción no válida. Inténtalo de nuevo.\n".encode('utf-8'))
         else:
             if len(cartasia) == 0:
                 carta = repartir_carta(mazo)
@@ -150,9 +103,10 @@ def handle_client(client_socket):
                 suma_jugador = calcular_suma(cartasPj)
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
-                client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())#Mensaje para el jugador, cartas y valor
+                client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
                 if resultado:
-                    client_socket.sendall(resultado.encode())#Mensaje para el jugador, resultado
+                    client_socket.sendall(resultado.encode())
                     break
                 TurnoPj = True
             elif len(cartasia) == 1:
@@ -162,6 +116,7 @@ def handle_client(client_socket):
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
                 client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
                 if resultado:
                     client_socket.sendall(resultado.encode())
                     break
@@ -171,6 +126,7 @@ def handle_client(client_socket):
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
                 client_socket.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
                 if resultado:
                     client_socket.sendall(resultado.encode())
                     break
