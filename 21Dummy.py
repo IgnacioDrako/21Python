@@ -1,35 +1,53 @@
 # Juego del 21 o BlackJack
 # Ignacio Delgado Alias Ignacio Drako
+import random
 
-cartasPj = []  # cartas que tiene el jugador
-cartasia = []  # cartas que tiene el contrario
-corazones = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]  # las cartas de cada palo
-diamantes = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-treboles = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-picas = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-jp_juega = True  # variable para controlar al jugador
-ia_juega = False  # variable para controlar el juego
-values = {
-    "A": 1,
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9,
-    "10": 10,
-    "J": 10,
-    "Q": 10,
-    "K": 10
-}
-mazo = [corazones, diamantes, treboles, picas]  # mazo de cartas
-TurnoPj = True  # turno del jugador, si falso turno del rival
+# Función para repartir una carta aleatoria del mazo
+def repartir_carta(mazo):
+    palo = random.choice(mazo)
+    carta = random.choice(palo)
+    palo.remove(carta)
+    return carta
+
+# Corrección de la función ia_robar_carta
+def ia_robar_carta(suma_contrario):
+    if suma_contrario >= 21:
+        return False
+    elif suma_contrario < 21:
+        return True
+    else:
+        return False
+
+# Corrección de la función control
+def control(suma_jugador, suma_contrario):
+    if suma_jugador > 21:
+        print("Te has excedido. Pierdes.")
+        return True
+    elif suma_contrario > 21:
+        print("El contrario se ha excedido. Ganas.")
+        return True
+    else:
+        return False
+
 # Función para calcular la suma de las cartas
 def calcular_suma(cartas):
     total = 0
     ases = 0
+    values = {
+        "A": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        "J": 10,
+        "Q": 10,
+        "K": 10
+    }
     for carta in cartas:
         if carta == "A":
             ases += 1
@@ -42,61 +60,83 @@ def calcular_suma(cartas):
             total += 11
         else:
             total += 1
-    
+
     return total
-# Menú
-print("Bienvenido al juego del 21 o BlackJack")
-print("1.-Jugar")
-print("2.-Salir")
-opcion = int(input("Elije una opcion: "))
-if opcion == 1:
+
+# Función principal del juego
+def juego():
+    global cartasPj, cartasia, mazo, TurnoPj
+    cartasPj = []  # cartas que tiene el jugador
+    cartasia = []  # cartas que tiene el contrario
+    corazones = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]  # las cartas de cada palo
+    diamantes = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    treboles = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    picas = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+    mazo = [corazones, diamantes, treboles, picas]  # mazo de cartas
+    TurnoPj = True  # turno del jugador, si falso turno del rival
     while True:
         if TurnoPj:
-            print("Cartas del jugador: ", cartasPj)
-            print("Cartas del contrario: ", cartasia)
             print("1.-Pedir carta")
             print("2.-Plantarse")
-            opcion = int(input("Elije una opcion: "))
+            try:
+                opcion = int(input("Elije una opcion: "))
+            except ValueError:
+                print("Opción no válida. Inténtalo de nuevo.")
+                continue
             if opcion == 1:
-                carta = mazo[0][0]
+                carta = repartir_carta(mazo)
                 cartasPj.append(carta)
-                mazo[0].remove(carta)
+                print("========================================")
                 print("Carta: ", carta)
+                print("========================================")
                 print("Cartas del jugador: ", cartasPj)
+                print("========================================")
                 print("Cartas del contrario: ", cartasia)
+                print("========================================")
+                suma_jugador = calcular_suma(cartasPj)
+                suma_contrario = calcular_suma(cartasia)
+                if control(suma_jugador, suma_contrario):
+                    break
                 if len(cartasPj) == 2:
                     TurnoPj = False
             elif opcion == 2:
                 TurnoPj = False
+            else:
+                print("Opción no válida. Inténtalo de nuevo.")
         else:
             if len(cartasia) == 0:
-                carta = mazo[0][0]
+                carta = repartir_carta(mazo)
                 cartasia.append(carta)
-                mazo[0].remove(carta)
-                carta = mazo[0][0]
+                carta = repartir_carta(mazo)
                 cartasia.append(carta)
-                mazo[0].remove(carta)
                 suma_jugador = calcular_suma(cartasPj)
                 suma_contrario = calcular_suma(cartasia)
-                print("Cartas del jugador: ", suma_jugador)
-                print("Suma del jugador: ", cartasia)
-                print("Cartas del contrario: ", cartasia)
-                print("Suma contrario: ", suma_contrario)
+                if control(suma_jugador, suma_contrario):
+                    break
                 TurnoPj = True
             elif len(cartasia) == 1:
-                carta = mazo[0][0]
+                carta = repartir_carta(mazo)
                 cartasia.append(carta)
-                mazo[0].remove(carta)
-                print("Cartas del jugador: ", cartasPj)
-                print("Cartas del contrario: ", cartasia)
+                suma_jugador = calcular_suma(cartasPj)
+                suma_contrario = calcular_suma(cartasia)
+                if control(suma_jugador, suma_contrario):
+                    break
                 TurnoPj = True
             elif len(cartasia) == 2:
                 suma_jugador = calcular_suma(cartasPj)
+                print("========================================")
                 print("Suma jugador: ", suma_jugador)
+                print("========================================")
                 suma_contrario = calcular_suma(cartasia)
+                print("========================================")
                 print("Suma contrario: ", suma_contrario)
+                print("========================================")
+                if control(suma_jugador, suma_contrario):
+                    break
                 if suma_jugador > suma_contrario:
+                    print("========================================")
                     print("Gana el jugador")
+                    print("========================================")
                     break
                 elif suma_jugador < suma_contrario:
                     print("Gana el contrario")
@@ -104,16 +144,21 @@ if opcion == 1:
                 else:
                     print("Empate")
                     break
-def ia_robar_carta():#si es menor a 17 roba carta, si es 21 se planta, si es mayor a 21 pierde
-    if suma_contrario == 21:
-        return False
-    elif suma_contrario <= 20:
-        return True
+
+# Bucle principal para jugar continuamente
+while True:
+    print("Bienvenido al juego del 21 o BlackJack")
+    print("1.-Jugar")
+    print("2.-Salir")
+    try:
+        opcion = int(input("Elije una opcion: "))
+    except ValueError:
+        print("Opción no válida. Inténtalo de nuevo.")
+        continue
+    if opcion == 1:
+        juego()
+    elif opcion == 2:
+        print("Gracias por jugar. ¡Hasta la próxima!")
+        break
     else:
-        return ia_pierde True
-def control():#si el jugador se pasa de 21 pierde
-    if suma_jugador > 21:
-        print("Te has excedido")
-        return True
-    else:
-        return False
+        print("Opción no válida. Inténtalo de nuevo.")
