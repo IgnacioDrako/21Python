@@ -138,11 +138,16 @@ def maquina(client_socket):
 def JCJ(client_socket1, client_socket2):
     global TurnoPj
     TurnoPj = True
+    client_socket1.sendall(b"Introduce tu nombre: ")
+    client_socket2.sendall(b"Introduce tu nombre: ")
+    NombrePJ1 = client_socket1.recv(1024).decode().strip()
+    NombrePJ2 = client_socket2.recv(1024).decode().strip()
     client_socket1.sendall(b"Otro jugador se ha conectado. La partida comienza ahora.\n")
     client_socket2.sendall(b"Te has conectado. La partida comienza ahora.\n")
     while True:
         if TurnoPj:
             client_socket1.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")
+            client_socket2.sendall(f"{NombrePJ1} esta pensado ...\n")
             opcion = client_socket1.recv(1024).decode().strip()
             if opcion == "1":
                 carta = repartir_carta(mazo)
@@ -151,8 +156,10 @@ def JCJ(client_socket1, client_socket2):
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
                 client_socket1.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
-                client_socket1.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
-                client_socket2.sendall(f"Mano del rival: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket1.sendall(f"Mano del rival {NombrePJ2}: {cartasia}, Valor: {suma_contrario}\n".encode())
+                client_socket2.sendall(f"Mano del rival {NombrePJ1}: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket1.sendall(f"Turno del rival\n".encode())
+                client_socket2.sendall(f"Tu turno\n".encode())
                 if resultado:
                     client_socket1.sendall(resultado.encode())
                     client_socket2.sendall(resultado.encode())
@@ -165,6 +172,7 @@ def JCJ(client_socket1, client_socket2):
                 client_socket1.sendall("Opción no válida. Inténtalo de nuevo.\n".encode('utf-8'))
         else:
             client_socket2.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")
+            client_socket1.sendall(f"{NombrePJ2} esta pensado ...\n")
             opcion = client_socket2.recv(1024).decode().strip()
             if opcion == "1":
                 carta = repartir_carta(mazo)
@@ -173,8 +181,9 @@ def JCJ(client_socket1, client_socket2):
                 suma_contrario = calcular_suma(cartasia)
                 resultado = control(suma_jugador, suma_contrario)
                 client_socket2.sendall(f"Tu mano: {cartasia}, Valor: {suma_contrario}\n".encode())
-                client_socket2.sendall(f"Mano del rival: {cartasPj}, Valor: {suma_jugador}\n".encode())
-                client_socket1.sendall(f"Mano del rival: {cartasia}, Valor: {suma_contrario}\n".encode())
+                client_socket2.sendall(f"Mano del rival {NombrePJ1}: {cartasPj}, Valor: {suma_jugador}\n".encode())
+                client_socket1.sendall(f"Mano del rival {NombrePJ2}: {cartasia}, Valor: {suma_contrario}\n".encode())
+                client_socket2.sendall(f"Turno del rival\n".encode())
                 if resultado:
                     client_socket1.sendall(resultado.encode())
                     client_socket2.sendall(resultado.encode())
