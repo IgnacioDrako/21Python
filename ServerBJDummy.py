@@ -147,7 +147,7 @@ def JCJ(client_socket1, client_socket2):
     while True:
         if TurnoPj:
             client_socket1.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")
-            client_socket2.sendall(f"{NombrePJ1} esta pensado ...\n")
+            client_socket2.sendall(f"{NombrePJ1} está pensando...\n".encode())
             opcion = client_socket1.recv(1024).decode().strip()
             if opcion == "1":
                 carta = repartir_carta(mazo)
@@ -158,8 +158,8 @@ def JCJ(client_socket1, client_socket2):
                 client_socket1.sendall(f"Tu mano: {cartasPj}, Valor: {suma_jugador}\n".encode())
                 client_socket1.sendall(f"Mano del rival {NombrePJ2}: {cartasia}, Valor: {suma_contrario}\n".encode())
                 client_socket2.sendall(f"Mano del rival {NombrePJ1}: {cartasPj}, Valor: {suma_jugador}\n".encode())
-                client_socket1.sendall(f"Turno del rival\n".encode())
-                client_socket2.sendall(f"Tu turno\n".encode())
+                client_socket1.sendall(b"Turno del rival\n")
+                client_socket2.sendall(b"Tu turno\n")
                 if resultado:
                     client_socket1.sendall(resultado.encode())
                     client_socket2.sendall(resultado.encode())
@@ -169,10 +169,10 @@ def JCJ(client_socket1, client_socket2):
             elif opcion == "2":
                 TurnoPj = False
             else:
-                client_socket1.sendall("Opción no válida. Inténtalo de nuevo.\n".encode('utf-8'))
+                client_socket1.sendall("Opción no válida. Inténtalo de nuevo.\n")
         else:
             client_socket2.sendall(b"1.-Pedir carta\n2.-Plantarse\nElije una opcion: ")
-            client_socket1.sendall(f"{NombrePJ2} esta pensado ...\n")
+            client_socket1.sendall(f"{NombrePJ2} está pensando...\n".encode())
             opcion = client_socket2.recv(1024).decode().strip()
             if opcion == "1":
                 carta = repartir_carta(mazo)
@@ -183,7 +183,8 @@ def JCJ(client_socket1, client_socket2):
                 client_socket2.sendall(f"Tu mano: {cartasia}, Valor: {suma_contrario}\n".encode())
                 client_socket2.sendall(f"Mano del rival {NombrePJ1}: {cartasPj}, Valor: {suma_jugador}\n".encode())
                 client_socket1.sendall(f"Mano del rival {NombrePJ2}: {cartasia}, Valor: {suma_contrario}\n".encode())
-                client_socket2.sendall(f"Turno del rival\n".encode())
+                client_socket2.sendall(b"Turno del rival\n")
+                client_socket1.sendall(b"Tu turno\n")
                 if resultado:
                     client_socket1.sendall(resultado.encode())
                     client_socket2.sendall(resultado.encode())
@@ -193,30 +194,34 @@ def JCJ(client_socket1, client_socket2):
             elif opcion == "2":
                 TurnoPj = True
             else:
-                client_socket2.sendall("Opción no válida. Inténtalo de nuevo.\n".encode('utf-8'))
+                client_socket2.sendall("Opción no válida. Inténtalo de nuevo.\n")
 
 # Función para manejar la conexión con un cliente
 def handle_client(client_socket):
     global cartasPj, cartasia, mazo, TurnoPj
-    cartasPj = []  # cartas que tiene el jugador
-    cartasia = []  # cartas que tiene el contrario
-    corazones = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]  # las cartas de cada palo
-    diamantes = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-    treboles = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-    picas = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-    mazo = [corazones, diamantes, treboles, picas]  # mazo de cartas
-    TurnoPj = True  # turno del jugador, si falso turno del rival
-    client_socket.sendall(b"1)Jugar contra maquina\n2)Jugar contra otra persona\nElije una opcion: ")
-    opcion = client_socket.recv(1024).decode().strip()
-    if opcion == "1":
-        maquina(client_socket)
-    elif opcion == "2":
-        client_socket.sendall(b"Esperando a otro jugador...\n")
-        waiting_players.append(client_socket)
-        if len(waiting_players) >= 2:
-            client_socket1 = waiting_players.pop(0)
-            client_socket2 = waiting_players.pop(0)
-            JCJ(client_socket1, client_socket2)
+    try:
+        cartasPj = []  # cartas que tiene el jugador
+        cartasia = []  # cartas que tiene el contrario
+        corazones = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]  # las cartas de cada palo
+        diamantes = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        treboles = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        picas = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        mazo = [corazones, diamantes, treboles, picas]  # mazo de cartas
+        TurnoPj = True  # turno del jugador, si falso turno del rival
+        client_socket.sendall(b"1)Jugar contra maquina\n2)Jugar contra otra persona\nElije una opcion: ")
+        opcion = client_socket.recv(1024).decode().strip()
+        if opcion == "1":
+            maquina(client_socket)
+        elif opcion == "2":
+            client_socket.sendall(b"Esperando a otro jugador...\n")
+            waiting_players.append(client_socket)
+            if len(waiting_players) >= 2:
+                client_socket1 = waiting_players.pop(0)
+                client_socket2 = waiting_players.pop(0)
+                JCJ(client_socket1, client_socket2)
+    except Exception as e:
+        print(f"Error: {e}")
+        client_socket.close()
 
 # Configuración del servidor
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -225,7 +230,10 @@ server.listen(5)
 print("Servidor escuchando en el puerto 9999")
 
 while True:
-    client_socket, addr = server.accept()
-    print(f"Conexión aceptada de {addr}")
-    client_handler = threading.Thread(target=handle_client, args=(client_socket,))
-    client_handler.start()
+    try:
+        client_socket, addr = server.accept()
+        print(f"Conexión aceptada de {addr}")
+        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+        client_handler.start()
+    except Exception as e:
+        print(f"Error al aceptar conexión: {e}")
